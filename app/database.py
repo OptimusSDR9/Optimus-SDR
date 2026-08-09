@@ -43,10 +43,16 @@ def initialize_database():
 
     lead_columns = {column["name"] for column in inspector.get_columns("leads")}
     missing_columns = {
-        "linkedin": "VARCHAR(500)",
+        "contact_person": "VARCHAR(255)",
+        "designation": "VARCHAR(255)",
+        "city": "VARCHAR(100)",
+        "country": "VARCHAR(100)",
+        "linkedin_url": "VARCHAR(500)",
         "npi": "VARCHAR(50)",
-        "insurance": "VARCHAR(255)",
-        "decision_maker": "VARCHAR(255)",
+        "practice_type": "VARCHAR(100)",
+        "independent_practice": "BOOLEAN NOT NULL DEFAULT 0",
+        "insurance_status": "VARCHAR(255)",
+        "lead_source": "VARCHAR(100)",
         "lead_score": "FLOAT NOT NULL DEFAULT 0.0",
         "tags": "VARCHAR(1000)",
         "notes": "TEXT",
@@ -62,6 +68,27 @@ def initialize_database():
                 )
         if "created_at" not in lead_columns:
             connection.execute(text("UPDATE leads SET created_at = CURRENT_TIMESTAMP"))
+        if "insurance" in lead_columns:
+            connection.execute(
+                text(
+                    "UPDATE leads SET insurance_status = insurance "
+                    "WHERE insurance_status IS NULL AND insurance IS NOT NULL"
+                )
+            )
+        if "linkedin" in lead_columns:
+            connection.execute(
+                text(
+                    "UPDATE leads SET linkedin_url = linkedin "
+                    "WHERE linkedin_url IS NULL AND linkedin IS NOT NULL"
+                )
+            )
+        if "decision_maker" in lead_columns:
+            connection.execute(
+                text(
+                    "UPDATE leads SET contact_person = decision_maker "
+                    "WHERE contact_person IS NULL AND decision_maker IS NOT NULL"
+                )
+            )
         connection.execute(
             text("UPDATE leads SET updated_at = COALESCE(updated_at, created_at, CURRENT_TIMESTAMP)")
         )

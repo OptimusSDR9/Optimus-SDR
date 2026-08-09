@@ -33,6 +33,23 @@ def new_lead_page(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(request, "leads/form.html", {"user": user, "lead": None})
 
 
+@router.get("/{lead_id}", name="lead_detail")
+def lead_detail_page(lead_id: int, request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+
+    lead = db.query(Lead).filter(Lead.id == lead_id).first()
+    if not lead:
+        return RedirectResponse(url="/leads", status_code=status.HTTP_303_SEE_OTHER)
+
+    return templates.TemplateResponse(
+        request,
+        "leads/detail.html",
+        {"user": user, "lead": lead},
+    )
+
+
 @router.post("/new")
 def create_lead(
     request: Request,

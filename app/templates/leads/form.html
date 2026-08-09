@@ -3,74 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Optimus AI SDR | Lead Form</title>
+    <title>Optimus RCM Solutions | {{ 'Edit lead' if lead else 'Add lead' }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/static/js/leads.js" defer></script>
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100">
-    <div class="mx-auto max-w-3xl px-6 py-10">
-        <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-xl">
-            <div class="mb-6">
-                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Lead Manager</p>
-                <h1 class="mt-2 text-3xl font-semibold">{{ 'Edit Lead' if lead else 'Create Lead' }}</h1>
-                <p class="mt-2 text-sm text-slate-400">Capture any detail that helps your team prioritize the right practices and personalize outreach.</p>
-            </div>
+<body data-page="lead-form" data-lead-id="{{ lead.id if lead else '' }}" class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <div class="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+        {% include 'components/nav.html' %}
 
-            {% if not lead %}
-            <div class="mb-6 rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-4 text-sm text-slate-300">
-                Tip: start with the practice name, doctor name, specialty, and location to build a strong foundation for scoring and outreach.
-            </div>
-            {% endif %}
-
-            <form method="post" action="{{ '/leads/' ~ lead.id ~ '/edit' if lead else '/leads/new' }}" class="space-y-4">
-                <div class="grid gap-4 md:grid-cols-2">
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="practice_name">Practice Name</label>
-                        <input id="practice_name" name="practice_name" type="text" required value="{{ lead.practice_name if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="doctor_name">Doctor Name</label>
-                        <input id="doctor_name" name="doctor_name" type="text" required value="{{ lead.doctor_name if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="specialty">Specialty</label>
-                        <input id="specialty" name="specialty" type="text" value="{{ lead.specialty if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="state">State</label>
-                        <input id="state" name="state" type="text" value="{{ lead.state if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="website">Website</label>
-                        <input id="website" name="website" type="text" value="{{ lead.website if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="email">Email</label>
-                        <input id="email" name="email" type="email" value="{{ lead.email if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="phone">Phone</label>
-                        <input id="phone" name="phone" type="text" value="{{ lead.phone if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
-                    </div>
-                    <div>
-                        <label class="mb-1 block text-sm text-slate-300" for="status">Status</label>
-                        <select id="status" name="status" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500">
-                            <option value="New" {% if lead and lead.status == 'New' %}selected{% endif %}>New</option>
-                            <option value="Qualified" {% if lead and lead.status == 'Qualified' %}selected{% endif %}>Qualified</option>
-                            <option value="Meeting Scheduled" {% if lead and lead.status == 'Meeting Scheduled' %}selected{% endif %}>Meeting Scheduled</option>
-                            <option value="Proposal Sent" {% if lead and lead.status == 'Proposal Sent' %}selected{% endif %}>Proposal Sent</option>
-                        </select>
-                    </div>
+        <main class="mt-6">
+            <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <a href="/leads" class="text-sm font-medium text-cyan-400 hover:text-cyan-300">← Back to lead management</a>
+                    <p class="mt-5 text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400">Optimus RCM Solutions</p>
+                    <h1 class="mt-2 text-3xl font-semibold tracking-tight text-white">{{ 'Edit lead' if lead else 'Add a new lead' }}</h1>
+                    <p class="mt-2 text-sm leading-6 text-slate-400">Capture the practice, contact, and qualification details your team needs for thoughtful outreach.</p>
                 </div>
+                <a id="form-detail-link" href="{{ '/leads/' ~ lead.id if lead else '#' }}" class="hidden rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300">View lead</a>
+            </div>
 
-                <div class="flex flex-wrap gap-3 pt-2">
-                    <button type="submit" class="rounded-lg bg-cyan-500 px-4 py-2 font-medium text-slate-950 transition hover:bg-cyan-400">Save Lead</button>
-                    <a href="/leads" class="rounded-lg border border-slate-700 px-4 py-2 font-medium text-slate-200 transition hover:border-cyan-500 hover:text-cyan-300">Back to list</a>
-                    {% if not lead %}
-                    <a href="/scoring" class="rounded-lg border border-slate-700 px-4 py-2 font-medium text-slate-200 transition hover:border-cyan-500 hover:text-cyan-300">Open scoring</a>
-                    {% endif %}
+            <div id="lead-form-loading" hidden class="rounded-3xl border border-slate-800 bg-slate-900/70 p-8 text-center text-sm text-slate-400">Loading lead details…</div>
+            <div id="lead-form-error" hidden class="mb-5 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
+
+            <form id="lead-form" method="post" action="{{ '/leads/' ~ lead.id ~ '/edit' if lead else '/leads/new' }}" class="space-y-5">
+                <section class="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl shadow-slate-950/30 sm:p-7">
+                    <div class="mb-5">
+                        <h2 class="text-lg font-semibold text-white">Practice profile</h2>
+                        <p class="mt-1 text-sm text-slate-500">The account and location details used to identify each opportunity.</p>
+                    </div>
+                    <div class="grid gap-5 md:grid-cols-2">
+                        <label class="block md:col-span-2"><span class="field-label">Practice name <b>*</b></span><input name="practice_name" type="text" required class="field-input" placeholder="Lakeside Medical Group"></label>
+                        <label class="block"><span class="field-label">Doctor name</span><input name="doctor_name" type="text" class="field-input" placeholder="Dr. Jordan Lee"></label>
+                        <label class="block"><span class="field-label">Contact person</span><input name="contact_person" type="text" class="field-input" placeholder="Taylor Morgan"></label>
+                        <label class="block"><span class="field-label">Designation</span><input name="designation" type="text" class="field-input" placeholder="Practice administrator"></label>
+                        <label class="block"><span class="field-label">Specialty</span><input name="specialty" type="text" class="field-input" placeholder="Cardiology"></label>
+                        <label class="block"><span class="field-label">Practice type</span><input name="practice_type" type="text" class="field-input" placeholder="Private practice"></label>
+                        <label class="block"><span class="field-label">City</span><input name="city" type="text" class="field-input" placeholder="Austin"></label>
+                        <label class="block"><span class="field-label">State / region</span><input name="state" type="text" class="field-input" placeholder="TX"></label>
+                        <label class="block"><span class="field-label">Country</span><input name="country" type="text" class="field-input" placeholder="United States"></label>
+                        <label class="block"><span class="field-label">Website</span><input name="website" type="url" class="field-input" placeholder="https://practice.com"></label>
+                    </div>
+                </section>
+
+                <section class="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl shadow-slate-950/30 sm:p-7">
+                    <div class="mb-5">
+                        <h2 class="text-lg font-semibold text-white">Contact and qualification</h2>
+                        <p class="mt-1 text-sm text-slate-500">Keep the essential outreach and qualification signals in one place.</p>
+                    </div>
+                    <div class="grid gap-5 md:grid-cols-2">
+                        <label class="block"><span class="field-label">Email</span><input name="email" type="email" class="field-input" placeholder="contact@practice.com"></label>
+                        <label class="block"><span class="field-label">Phone</span><input name="phone" type="tel" class="field-input" placeholder="(512) 555-0144"></label>
+                        <label class="block"><span class="field-label">LinkedIn URL</span><input name="linkedin_url" type="url" class="field-input" placeholder="https://linkedin.com/company/…"></label>
+                        <label class="block"><span class="field-label">NPI</span><input name="npi" type="text" class="field-input" placeholder="10-digit NPI number"></label>
+                        <label class="block"><span class="field-label">Insurance status</span><input name="insurance_status" type="text" class="field-input" placeholder="Verified, pending, unknown"></label>
+                        <label class="block"><span class="field-label">Lead source</span><input name="lead_source" type="text" class="field-input" placeholder="Referral, web, event"></label>
+                        <label class="block"><span class="field-label">Lead score</span><input name="lead_score" type="number" min="0" step="0.1" class="field-input" placeholder="0"></label>
+                        <label class="block"><span class="field-label">Priority</span><select name="priority" class="field-input"><option>Urgent</option><option>High</option><option selected>Medium</option><option>Low</option></select></label>
+                        <label class="block"><span class="field-label">Status</span><select name="status" class="field-input"><option selected>New</option><option>Qualified</option><option>Meeting Scheduled</option><option>Proposal Sent</option><option>Closed Won</option><option>Closed Lost</option></select></label>
+                        <label class="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/50 px-4 py-3 md:mt-6"><input name="independent_practice" type="checkbox" class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-cyan-400 focus:ring-cyan-400"><span><span class="block text-sm font-medium text-slate-200">Independent practice</span><span class="block text-xs text-slate-500">Mark if not part of a larger health system.</span></span></label>
+                    </div>
+                </section>
+
+                <section class="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl shadow-slate-950/30 sm:p-7">
+                    <div class="mb-5"><h2 class="text-lg font-semibold text-white">Working notes</h2><p class="mt-1 text-sm text-slate-500">Give the next teammate enough context to take the next best action.</p></div>
+                    <div class="grid gap-5 md:grid-cols-2">
+                        <label class="block md:col-span-2"><span class="field-label">Notes</span><textarea name="notes" rows="5" class="field-input" placeholder="Relevant context, timing, or discovery notes…"></textarea></label>
+                        <label class="block md:col-span-2"><span class="field-label">Tags</span><input name="tags" type="text" class="field-input" placeholder="high-fit, referral, texas"></label>
+                    </div>
+                </section>
+
+                <div class="flex flex-col-reverse gap-3 pb-8 sm:flex-row sm:justify-end">
+                    <a href="/leads" class="inline-flex justify-center rounded-xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300">Cancel</a>
+                    <button id="lead-form-submit" type="submit" class="inline-flex justify-center rounded-xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/20 transition hover:bg-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:cursor-not-allowed disabled:opacity-60"><span id="lead-form-submit-label">{{ 'Save changes' if lead else 'Create lead' }}</span></button>
                 </div>
             </form>
-        </div>
+        </main>
     </div>
+    <style>
+        .field-label { display:block; margin-bottom:.45rem; color:#cbd5e1; font-size:.8125rem; font-weight:500; }
+        .field-label b { color:#67e8f9; }
+        .field-input { width:100%; border-radius:.75rem; border:1px solid #334155; background:rgba(2,6,23,.8); padding:.7rem .8rem; color:#f8fafc; outline:none; transition:all .15s; }
+        .field-input::placeholder { color:#475569; }
+        .field-input:focus { border-color:#22d3ee; box-shadow:0 0 0 3px rgba(34,211,238,.12); }
+    </style>
 </body>
 </html>

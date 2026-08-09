@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Lead Scoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">AI Lead Scoring</p>
+                <h1 class="mt-2 text-3xl font-semibold">Prioritize the best-fit prospects</h1>
+                <p class="mt-2 text-sm text-slate-400">A lightweight scoring model ranks leads by healthcare relevance, contact completeness, and momentum.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
+                <p class="text-sm text-slate-400">Highest score</p>
+                <p class="mt-2 text-2xl font-semibold text-cyan-400">{% if scored_leads %}{{ scored_leads[0].score }}{% else %}0{% endif %}/100</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
+                <p class="text-sm text-slate-400">Leads reviewed</p>
+                <p class="mt-2 text-2xl font-semibold text-emerald-400">{{ scored_leads|length }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
+                <p class="text-sm text-slate-400">Priority hint</p>
+                <p class="mt-2 text-sm text-slate-300">Focus on leads above 70 for immediate outreach or follow-up.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 space-y-4">
+            {% if scored_leads %}
+            {% for item in scored_leads %}
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold">{{ item.lead.practice_name }}</h2>
+                        <p class="mt-1 text-sm text-slate-400">{{ item.lead.doctor_name }} · {{ item.lead.specialty or 'Specialty pending' }}</p>
+                    </div>
+                    <div class="rounded-xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 text-center">
+                        <p class="text-sm text-cyan-300">Score</p>
+                        <p class="text-2xl font-semibold text-cyan-400">{{ item.score }}/100</p>
+                        {% if item.score >= 70 %}
+                        <p class="mt-1 text-xs font-medium text-emerald-300">Immediate priority</p>
+                        {% elif item.score >= 50 %}
+                        <p class="mt-1 text-xs font-medium text-amber-300">Warm lead</p>
+                        {% else %}
+                        <p class="mt-1 text-xs font-medium text-slate-400">Needs more context</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    {% for reason in item.reasons %}
+                    <span class="rounded-full border border-slate-700 bg-slate-950/70 px-3 py-1 text-sm text-slate-300">{{ reason }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="rounded-2xl border border-dashed border-slate-700 bg-slate-900/80 p-8 text-center text-sm text-slate-400">
+                No leads are currently available for scoring.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

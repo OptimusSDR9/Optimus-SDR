@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Lead Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-3xl px-6 py-10">
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-xl">
+            <div class="mb-6">
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Lead Manager</p>
+                <h1 class="mt-2 text-3xl font-semibold">{{ 'Edit Lead' if lead else 'Create Lead' }}</h1>
+                <p class="mt-2 text-sm text-slate-400">Capture any detail that helps your team prioritize the right practices and personalize outreach.</p>
+            </div>
+
+            {% if not lead %}
+            <div class="mb-6 rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-4 text-sm text-slate-300">
+                Tip: start with the practice name, doctor name, specialty, and location to build a strong foundation for scoring and outreach.
+            </div>
+            {% endif %}
+
+            <form method="post" action="{{ '/leads/' ~ lead.id ~ '/edit' if lead else '/leads/new' }}" class="space-y-4">
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="practice_name">Practice Name</label>
+                        <input id="practice_name" name="practice_name" type="text" required value="{{ lead.practice_name if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="doctor_name">Doctor Name</label>
+                        <input id="doctor_name" name="doctor_name" type="text" required value="{{ lead.doctor_name if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="specialty">Specialty</label>
+                        <input id="specialty" name="specialty" type="text" value="{{ lead.specialty if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="state">State</label>
+                        <input id="state" name="state" type="text" value="{{ lead.state if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="website">Website</label>
+                        <input id="website" name="website" type="text" value="{{ lead.website if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="email">Email</label>
+                        <input id="email" name="email" type="email" value="{{ lead.email if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="phone">Phone</label>
+                        <input id="phone" name="phone" type="text" value="{{ lead.phone if lead else '' }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500" />
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm text-slate-300" for="status">Status</label>
+                        <select id="status" name="status" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 focus:border-cyan-500">
+                            <option value="New" {% if lead and lead.status == 'New' %}selected{% endif %}>New</option>
+                            <option value="Qualified" {% if lead and lead.status == 'Qualified' %}selected{% endif %}>Qualified</option>
+                            <option value="Meeting Scheduled" {% if lead and lead.status == 'Meeting Scheduled' %}selected{% endif %}>Meeting Scheduled</option>
+                            <option value="Proposal Sent" {% if lead and lead.status == 'Proposal Sent' %}selected{% endif %}>Proposal Sent</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <button type="submit" class="rounded-lg bg-cyan-500 px-4 py-2 font-medium text-slate-950 transition hover:bg-cyan-400">Save Lead</button>
+                    <a href="/leads" class="rounded-lg border border-slate-700 px-4 py-2 font-medium text-slate-200 transition hover:border-cyan-500 hover:text-cyan-300">Back to list</a>
+                    {% if not lead %}
+                    <a href="/scoring" class="rounded-lg border border-slate-700 px-4 py-2 font-medium text-slate-200 transition hover:border-cyan-500 hover:text-cyan-300">Open scoring</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Settings</p>
+                <h1 class="mt-2 text-3xl font-semibold">Configure integrations and secure defaults</h1>
+                <p class="mt-2 text-sm text-slate-400">Store the operational values you need for AI modules, email delivery, and session security.</p>
+            </div>
+
+            {% if saved %}
+            <div class="mt-6 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+                Settings were updated successfully.
+            </div>
+            {% endif %}
+
+            <form method="post" action="/settings" class="mt-6 space-y-4">
+                <div>
+                    <label class="mb-1 block text-sm text-slate-300" for="openai_api_key">OpenAI API Key</label>
+                    <input id="openai_api_key" name="openai_api_key" type="password" value="{{ config.openai_api_key }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500" />
+                </div>
+                <div>
+                    <label class="mb-1 block text-sm text-slate-300" for="zoho_api_key">Zoho API Key</label>
+                    <input id="zoho_api_key" name="zoho_api_key" type="password" value="{{ config.zoho_api_key }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500" />
+                </div>
+                <div>
+                    <label class="mb-1 block text-sm text-slate-300" for="zoho_from_email">Zoho From Email</label>
+                    <input id="zoho_from_email" name="zoho_from_email" type="text" value="{{ config.zoho_from_email }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500" />
+                </div>
+                <div>
+                    <label class="mb-1 block text-sm text-slate-300" for="session_secret_key">Session Secret Key</label>
+                    <input id="session_secret_key" name="session_secret_key" type="password" value="{{ config.session_secret_key }}" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500" />
+                </div>
+                <button type="submit" class="rounded-lg bg-cyan-500 px-5 py-3 font-medium text-slate-950 transition hover:bg-cyan-400">Save Settings</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

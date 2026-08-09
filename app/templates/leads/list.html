@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Lead Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Lead Manager</p>
+                <h1 class="mt-2 text-3xl font-semibold">Healthcare leads</h1>
+                <p class="mt-2 text-sm text-slate-400">Capture the next best prospect for your RCM outreach motion.</p>
+            </div>
+            <a href="/leads/new" class="rounded-lg bg-cyan-500 px-4 py-2 font-medium text-slate-950 transition hover:bg-cyan-400">Add lead</a>
+        </div>
+
+        <div class="mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-800">
+                    <thead class="bg-slate-950/70">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-300">Practice</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-300">Doctor</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-300">Specialty</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-300">State</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-300">Status</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-slate-300">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        {% if leads %}
+                        {% for lead in leads %}
+                        <tr class="hover:bg-slate-800/50">
+                            <td class="px-4 py-3 text-sm text-slate-100">{{ lead.practice_name }}</td>
+                            <td class="px-4 py-3 text-sm text-slate-300">{{ lead.doctor_name }}</td>
+                            <td class="px-4 py-3 text-sm text-slate-300">{{ lead.specialty or '—' }}</td>
+                            <td class="px-4 py-3 text-sm text-slate-300">{{ lead.state or '—' }}</td>
+                            <td class="px-4 py-3 text-sm">
+                                <span class="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1 text-cyan-300">{{ lead.status }}</span>
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                <a href="/leads/{{ lead.id }}/edit" class="font-medium text-cyan-400 hover:text-cyan-300">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="px-4 py-6 text-center text-sm text-slate-400">No leads yet. Create your first lead to begin orchestration.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

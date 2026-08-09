@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Notes</p>
+                <h1 class="mt-2 text-3xl font-semibold">Capture lead context and internal insights</h1>
+                <p class="mt-2 text-sm text-slate-400">Keep call notes, observations, and follow-up reminders attached to each account.</p>
+            </div>
+
+            <div class="mt-6 grid gap-6 lg:grid-cols-[0.5fr_1fr]">
+                <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                    <h2 class="text-lg font-semibold">Leads</h2>
+                    <div class="mt-4 space-y-2">
+                        {% for lead in leads %}
+                        <a href="/notes/{{ lead.id }}" class="block rounded-lg border border-slate-800 px-3 py-2 text-sm text-slate-300 hover:border-cyan-500 hover:text-cyan-300">
+                            {{ lead.practice_name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                    {% if selected_lead %}
+                    <h2 class="text-lg font-semibold">{{ selected_lead.practice_name }}</h2>
+                    <p class="mt-1 text-sm text-slate-400">{{ selected_lead.doctor_name }} · {{ selected_lead.specialty or 'Specialty pending' }}</p>
+
+                    <form method="post" action="/notes/{{ selected_lead.id }}" class="mt-4">
+                        <textarea name="content" rows="5" required placeholder="Add a note about this lead" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500"></textarea>
+                        <button type="submit" class="mt-3 rounded-lg bg-cyan-500 px-4 py-2 font-medium text-slate-950 transition hover:bg-cyan-400">Save Note</button>
+                    </form>
+
+                    <div class="mt-6 space-y-3">
+                        {% if notes %}
+                        {% for note in notes %}
+                        <div class="rounded-lg border border-slate-800 bg-slate-900/70 p-3">
+                            <p class="text-sm text-slate-300">{{ note.content }}</p>
+                            <p class="mt-2 text-xs uppercase tracking-[0.25em] text-slate-500">{{ note.created_at }}</p>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-sm text-slate-400">No notes yet. Add the first note for this lead.</p>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <p class="text-sm text-slate-400">Select a lead to view or add notes.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

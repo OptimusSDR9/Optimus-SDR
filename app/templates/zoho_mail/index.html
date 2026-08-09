@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Zoho Mail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Zoho Mail</p>
+                <h1 class="mt-2 text-3xl font-semibold">Send outreach from your configured mailbox</h1>
+                <p class="mt-2 text-sm text-slate-400">Dispatch prepared outreach messages through a configurable Zoho Mail endpoint.</p>
+            </div>
+
+            <form method="post" action="/zoho-mail" class="mt-6 space-y-4">
+                <select name="lead_id" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500">
+                    {% for lead in leads %}
+                    <option value="{{ lead.id }}" {% if selected_id == lead.id %}selected{% endif %}>{{ lead.practice_name }} - {{ lead.doctor_name }}</option>
+                    {% endfor %}
+                </select>
+                <input name="subject" type="text" required placeholder="Email subject" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500" />
+                <textarea name="body" rows="8" required placeholder="Email body" class="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500"></textarea>
+                <button type="submit" class="rounded-lg bg-cyan-500 px-5 py-3 font-medium text-slate-950 transition hover:bg-cyan-400">Send Email</button>
+            </form>
+        </div>
+
+        {% if result %}
+        <div class="mt-8 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <p class="text-sm {% if result.success %}text-emerald-400{% else %}text-rose-300{% endif %}">{{ result.message }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

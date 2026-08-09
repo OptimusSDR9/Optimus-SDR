@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Dashboard</p>
+                <h1 class="mt-2 text-3xl font-semibold">Welcome, {{ user.full_name }}</h1>
+                <p class="mt-2 text-sm text-slate-400">Track your healthcare pipeline and prioritise the most promising prospects.</p>
+            </div>
+            <form method="post" action="/auth/logout">
+                <button type="submit" class="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-500 hover:text-cyan-300">Logout</button>
+            </form>
+        </div>
+
+        <div class="mt-8 grid gap-6 md:grid-cols-3">
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+                <p class="text-sm text-slate-400">Total Leads</p>
+                <p class="mt-3 text-3xl font-semibold text-cyan-400">{{ total_leads }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+                <p class="text-sm text-slate-400">New Leads</p>
+                <p class="mt-3 text-3xl font-semibold text-emerald-400">{{ new_leads }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+                <p class="text-sm text-slate-400">Qualified</p>
+                <p class="mt-3 text-3xl font-semibold text-amber-400">{{ qualified_leads }}</p>
+            </div>
+        </div>
+
+        {% include 'components/quickstart.html' %}
+
+        <section class="mt-8 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Onboarding progress</p>
+                    <h2 class="mt-2 text-xl font-semibold">Complete the essentials to get the most from Optimus AI SDR</h2>
+                </div>
+                <div class="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-300">
+                    {{ onboarding.percent }}% complete
+                </div>
+            </div>
+            <div class="mt-4 h-2 rounded-full bg-slate-800">
+                <div class="h-2 rounded-full bg-cyan-500" style="width: {{ onboarding.percent }}%"></div>
+            </div>
+            <div class="mt-6 space-y-3">
+                {% for step in onboarding.steps %}
+                <div class="flex items-start justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3">
+                    <div>
+                        <p class="font-medium text-slate-100">{{ step.title }}</p>
+                        <p class="mt-1 text-sm text-slate-400">{{ step.description }}</p>
+                    </div>
+                    {% if step.completed %}
+                    <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-300">Done</span>
+                    {% else %}
+                    <span class="rounded-full border border-slate-700 px-3 py-1 text-sm font-medium text-slate-400">Pending</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <div class="mt-8 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold">Recent Leads</h2>
+                <a href="/leads" class="text-sm font-medium text-cyan-400 hover:text-cyan-300">Manage leads</a>
+            </div>
+            {% if recent_leads %}
+            <div class="mt-6 space-y-3">
+                {% for lead in recent_leads %}
+                <div class="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3">
+                    <div>
+                        <p class="font-medium text-slate-100">{{ lead.practice_name }}</p>
+                        <p class="text-sm text-slate-400">{{ lead.doctor_name }} · {{ lead.specialty or 'Specialty pending' }}</p>
+                    </div>
+                    <span class="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-sm text-cyan-300">{{ lead.status }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="mt-6 rounded-xl border border-dashed border-slate-700 px-4 py-6 text-center text-sm text-slate-400">
+                No leads have been added yet. The lead manager module will populate this view next.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

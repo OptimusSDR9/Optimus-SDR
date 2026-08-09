@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">CRM</p>
+                    <h1 class="mt-2 text-3xl font-semibold">Client relationship pipeline</h1>
+                    <p class="mt-2 text-sm text-slate-400">Track prospect progress as opportunities move through your outreach stages.</p>
+                </div>
+                <a href="/leads" class="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-500 hover:text-cyan-300">Back to leads</a>
+            </div>
+        </div>
+
+        <div class="mt-8 grid gap-6 lg:grid-cols-2">
+            {% if contacts %}
+            {% for contact in contacts %}
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-semibold text-slate-100">{{ contact.practice_name }}</h2>
+                        <p class="mt-1 text-sm text-slate-400">{{ contact.doctor_name }} · {{ contact.specialty or 'Specialty pending' }}</p>
+                    </div>
+                    <span class="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-sm text-cyan-300">{{ contact.status }}</span>
+                </div>
+
+                <div class="mt-4 space-y-2 text-sm text-slate-300">
+                    <p><span class="text-slate-500">Email:</span> {{ contact.email or '—' }}</p>
+                    <p><span class="text-slate-500">Phone:</span> {{ contact.phone or '—' }}</p>
+                    <p><span class="text-slate-500">State:</span> {{ contact.state or '—' }}</p>
+                    <p><span class="text-slate-500">Website:</span> {{ contact.website or '—' }}</p>
+                </div>
+
+                <form method="post" action="/crm/update-status/{{ contact.id }}" class="mt-6 flex flex-wrap items-center gap-3">
+                    <select name="status_value" class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 focus:border-cyan-500">
+                        <option value="New" {% if contact.status == 'New' %}selected{% endif %}>New</option>
+                        <option value="Qualified" {% if contact.status == 'Qualified' %}selected{% endif %}>Qualified</option>
+                        <option value="Meeting Scheduled" {% if contact.status == 'Meeting Scheduled' %}selected{% endif %}>Meeting Scheduled</option>
+                        <option value="Proposal Sent" {% if contact.status == 'Proposal Sent' %}selected{% endif %}>Proposal Sent</option>
+                    </select>
+                    <button type="submit" class="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-cyan-400">Update stage</button>
+                </form>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="rounded-2xl border border-dashed border-slate-700 bg-slate-900/80 p-8 text-center text-sm text-slate-400">
+                No contacts are available yet. Add leads first and they will appear here as CRM records.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

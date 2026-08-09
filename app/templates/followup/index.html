@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Follow-up Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Follow-up Engine</p>
+                <h1 class="mt-2 text-3xl font-semibold">Manage your outreach cadence</h1>
+                <p class="mt-2 text-sm text-slate-400">A simple sequence to keep each prospect warm and progress them toward conversion.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 space-y-4">
+            {% if queue %}
+            {% for item in queue %}
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold">{{ item.lead.practice_name }}</h2>
+                        <p class="mt-1 text-sm text-slate-400">{{ item.lead.doctor_name }} · {{ item.lead.specialty or 'Specialty pending' }}</p>
+                    </div>
+                    <form method="post" action="/followup/schedule">
+                        <input type="hidden" name="lead_id" value="{{ item.lead.id }}" />
+                        <button type="submit" class="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-cyan-400">Schedule follow-up</button>
+                    </form>
+                </div>
+                <div class="mt-4 grid gap-3 md:grid-cols-2">
+                    {% for step in item.steps %}
+                    <div class="rounded-xl border border-slate-800 bg-slate-950/70 p-4">
+                        <p class="text-sm font-medium text-slate-100">{{ step.label }}</p>
+                        <p class="mt-1 text-sm text-slate-400">Due: {{ step.due }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="rounded-2xl border border-dashed border-slate-700 bg-slate-900/80 p-8 text-center text-sm text-slate-400">
+                No leads are available for follow-up planning.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

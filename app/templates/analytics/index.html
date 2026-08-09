@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Analytics</p>
+                <h1 class="mt-2 text-3xl font-semibold">Track your SDR pipeline health</h1>
+                <p class="mt-2 text-sm text-slate-400">Monitor lead volume, conversion progress, and note activity across the platform.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 grid gap-6 md:grid-cols-4">
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+                <p class="text-sm text-slate-400">Total Leads</p>
+                <p class="mt-3 text-3xl font-semibold text-cyan-400">{{ summary.total_leads }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+                <p class="text-sm text-slate-400">Qualified</p>
+                <p class="mt-3 text-3xl font-semibold text-emerald-400">{{ summary.qualified }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+                <p class="text-sm text-slate-400">New</p>
+                <p class="mt-3 text-3xl font-semibold text-amber-400">{{ summary.new }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+                <p class="text-sm text-slate-400">Notes</p>
+                <p class="mt-3 text-3xl font-semibold text-fuchsia-400">{{ summary.notes }}</p>
+            </div>
+        </div>
+
+        <div class="mt-8 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <h2 class="text-xl font-semibold">Pipeline by status</h2>
+            <div class="mt-4 space-y-3">
+                {% for status, count in summary.by_status.items() %}
+                <div class="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3">
+                    <span class="text-sm text-slate-300">{{ status }}</span>
+                    <span class="text-sm font-semibold text-cyan-300">{{ count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

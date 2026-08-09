@@ -3,9 +3,11 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-BASE_DIR = Path(__file__).resolve().parents[2]
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-DATABASE_PATH = BASE_DIR / "data" / "optimus.db"
+DATABASE_PATH = DATA_DIR / "optimus.db"
 
 DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 

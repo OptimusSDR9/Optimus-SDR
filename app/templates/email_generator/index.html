@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimus AI SDR | Email Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        {% include 'components/nav.html' %}
+        <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">AI Email Generator</p>
+                <h1 class="mt-2 text-3xl font-semibold">Create outbound outreach drafts</h1>
+                <p class="mt-2 text-sm text-slate-400">Turn a qualified lead into a tailored outreach email in seconds.</p>
+            </div>
+
+            <form method="post" action="/email-generator" class="mt-6 flex flex-col gap-3 md:flex-row">
+                <select name="lead_id" class="rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500">
+                    {% for lead in leads %}
+                    <option value="{{ lead.id }}" {% if selected_id == lead.id %}selected{% endif %}>{{ lead.practice_name }} - {{ lead.doctor_name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="tone" class="rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 focus:border-cyan-500">
+                    <option value="professional">Professional</option>
+                    <option value="friendly">Friendly</option>
+                    <option value="direct">Direct</option>
+                </select>
+                <button type="submit" class="rounded-lg bg-cyan-500 px-5 py-3 font-medium text-slate-950 transition hover:bg-cyan-400">Generate Draft</button>
+            </form>
+        </div>
+
+        {% if draft %}
+        <div class="mt-8 rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl">
+            <h2 class="text-xl font-semibold">Generated draft</h2>
+            <pre class="mt-4 whitespace-pre-wrap rounded-xl border border-slate-800 bg-slate-950/80 p-4 text-sm leading-7 text-slate-300">{{ draft }}</pre>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

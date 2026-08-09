@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
-from app.database import Base, engine, get_db
+from app.database import Base, engine, get_db, initialize_database
 from app.routes.analytics import router as analytics_router
 from app.routes.analyzer import router as analyzer_router
 from app.routes.auth import get_current_user, router as auth_router
@@ -16,6 +16,7 @@ from app.routes.dashboard import router as dashboard_router
 from app.routes.email_generator import router as email_generator_router
 from app.routes.followup import router as followup_router
 from app.routes.leads import router as leads_router
+from app.routes.leads_api import router as leads_api_router
 from app.routes.notes import router as notes_router
 from app.routes.reply_detection import router as reply_detection_router
 from app.routes.scoring import router as scoring_router
@@ -36,6 +37,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(dashboard_router)
 app.include_router(leads_router)
+app.include_router(leads_api_router)
 app.include_router(crm_router)
 app.include_router(analyzer_router)
 app.include_router(scoring_router)
@@ -47,7 +49,7 @@ app.include_router(notes_router)
 app.include_router(analytics_router)
 app.include_router(settings_router)
 
-Base.metadata.create_all(bind=engine)
+initialize_database()
 
 templates = Jinja2Templates(directory="app/templates")
 

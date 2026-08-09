@@ -3,7 +3,7 @@ import secrets
 from hashlib import pbkdf2_hmac
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Form, Request, status
+from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -45,6 +45,16 @@ def get_current_user(request: Request, db: Session = Depends(get_db)) -> Optiona
     if not user_id:
         return None
     return db.query(User).filter(User.id == user_id).first()
+
+
+def require_current_user(user: Optional[User] = Depends(get_current_user)) -> User:
+    """Require the existing session-based authentication for API routes."""
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required",
+        )
+    return user
 
 
 @router.get("/login", name="login")
